@@ -1,0 +1,1 @@
+dxdiag /whql:off /x c:\dxdiag.xml
