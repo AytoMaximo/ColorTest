@@ -48,10 +48,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EFlogger.EntityFramework6, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EFlogger-For6.0.3.3\lib\EFlogger.EntityFramework6.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -96,25 +92,37 @@
     <Compile Include="Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
-    <Compile Include="mdtestResult.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>mdtestResult.Context.tt</DependentUpon>
+    <Compile Include="Form4.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mdtestResult.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>mdtestResult.tt</DependentUpon>
+    <Compile Include="Form4.Designer.cs">
+      <DependentUpon>Form4.cs</DependentUpon>
     </Compile>
-    <Compile Include="mdtestResult.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>mdtestResult.edmx</DependentUpon>
+    <Compile Include="Form5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form5.Designer.cs">
+      <DependentUpon>Form5.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="testResult.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>testResult.Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="testResult.cs">
-      <DependentUpon>mdtestResult.tt</DependentUpon>
+      <DependentUpon>testResult.tt</DependentUpon>
+    </Compile>
+    <Compile Include="testResult.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>testResult.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="testResult1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>testResult.tt</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -125,6 +133,12 @@
     <EmbeddedResource Include="Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Form4.resx">
+      <DependentUpon>Form4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form5.resx">
+      <DependentUpon>Form5.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -134,13 +148,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EntityDeploy Include="mdtestResult.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>mdtestResult.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="mdtestResult.edmx.diagram">
-      <DependentUpon>mdtestResult.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -151,6 +158,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EntityDeploy Include="testResult.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>testResult.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="testResult.edmx.diagram">
+      <DependentUpon>testResult.edmx</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -173,22 +187,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="mdtestResult.Context.tt">
+    <Content Include="testResult.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>mdtestResult.edmx</DependentUpon>
-      <LastGenOutput>mdtestResult.Context.cs</LastGenOutput>
+      <DependentUpon>testResult.edmx</DependentUpon>
+      <LastGenOutput>testResult.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="mdtestResult.tt">
+    <Content Include="testResult.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>mdtestResult.edmx</DependentUpon>
-      <LastGenOutput>mdtestResult.cs</LastGenOutput>
-    </Content>
-    <Content Include="testResult.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="testResult_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>testResult.mdf</DependentUpon>
+      <DependentUpon>testResult.edmx</DependentUpon>
+      <LastGenOutput>testResult1.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

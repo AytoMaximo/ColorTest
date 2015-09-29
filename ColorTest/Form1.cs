@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data.SqlClient;
-using EFlogger.EntityFramework6;
+using System.Linq;
+using System.Threading;
 
 namespace ColorTest
 {
@@ -11,93 +11,92 @@ namespace ColorTest
         public Form1()
         {
             InitializeComponent();
-            EFloggerFor6.Initialize();
         }
 
         int r, g, b;   //кодировка цвета
         int page = 1; //номер страницы
         int check = 0; //подсчет галочек на странице
         public string model;
-        int x = -30; int y = 20;
-
-        int[,] colorMtx = new int[2, 74]; //массив соответствий оттенков и галочек 
-
+        int x = -30; int y = 30;        
         int hue = 0; //для матрицы
 
         private void Form1_Load(object sender, EventArgs e)
-        { 
-            Form3 modelMon = new Form3();
-            modelMon.ShowDialog();
-            model = modelMon.textBox1.Text;
+        {
+            string pathFull = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            int n = pathFull.IndexOf("ColorTest.exe");
+            string path = pathFull.Remove(n);
+            pathFull = @path.Replace(@"\\", @"\");
+            pathFull = pathFull.Remove(pathFull.Length-1);
+            AppDomain.CurrentDomain.SetData("DataDirectory", pathFull);
 
             foreach (Control control in this.Controls)
                 if (control is Panel)
                 {
+                    control.Click += new EventHandler(colorChecked);
+
                     if (control.Tag == "Etalon")
                     {
                         HsbToRgb(0, 1, 1, out r, out g, out b);
                         control.BackColor = Color.FromArgb(r, g, b);
                     }
-
-                    if (control.Tag == "Saturation")
-                    {
+                   
                         switch (control.Name)
                         {
                             case "panel1":
-                                HsbToRgb(2, 1, 1, out r, out g, out b);
+                                HsbToRgb(5, 1, 1, out r, out g, out b);
                                 control.BackColor = Color.FromArgb(r, g, b);
                                 break;
                             case "panel2":
-                                HsbToRgb(4, 1, 1, out r, out g, out b);
-                                control.BackColor = Color.FromArgb(r, g, b);
-                                break;
-                            case "panel3":
-                                HsbToRgb(6, 1, 1, out r, out g, out b);
-                                control.BackColor = Color.FromArgb(r, g, b);
-                                break;
-                            case "panel4":
-                                HsbToRgb(8, 1, 1, out r, out g, out b);
-                                control.BackColor = Color.FromArgb(r, g, b);
-                                break;
-                            case "panel5":
-                                HsbToRgb(10, 1, 1, out r, out g, out b);
-                                control.BackColor = Color.FromArgb(r, g, b);
-                                break;
-                        }
-
-                    }
-
-                    if (control.Tag == "Brightness")
-                    {
-                        switch (control.Name)
-                        {
-                            case "panel15":
-                                HsbToRgb(12, 1, 1, out r, out g, out b);
-                                control.BackColor = Color.FromArgb(r, g, b);
-                                break;
-                            case "panel14":
                                 HsbToRgb(14, 1, 1, out r, out g, out b);
                                 control.BackColor = Color.FromArgb(r, g, b);
                                 break;
+                            case "panel3":
+                                HsbToRgb(2, 1, 1, out r, out g, out b);
+                                control.BackColor = Color.FromArgb(r, g, b);
+                                break;
+                            case "panel4":
+                                HsbToRgb(26, 1, 1, out r, out g, out b);
+                                control.BackColor = Color.FromArgb(r, g, b);
+                                break;
+                            case "panel5":
+                                HsbToRgb(23, 1, 1, out r, out g, out b);
+                                control.BackColor = Color.FromArgb(r, g, b);
+                                break;
+                        }                  
+                                   
+                        switch (control.Name)
+                        {
+                            case "panel15":
+                                HsbToRgb(8, 1, 1, out r, out g, out b);
+                                control.BackColor = Color.FromArgb(r, g, b);
+                                break;
+                            case "panel14":
+                                HsbToRgb(13, 1, 1, out r, out g, out b);
+                                control.BackColor = Color.FromArgb(r, g, b);
+                                break;
                             case "panel13":
-                                HsbToRgb(16, 1, 1, out r, out g, out b);
+                                HsbToRgb(9, 1, 1, out r, out g, out b);
                                 control.BackColor = Color.FromArgb(r, g, b);
                                 break;
                             case "panel12":
-                                HsbToRgb(18, 1, 1, out r, out g, out b);
+                                HsbToRgb(28, 1, 1, out r, out g, out b);
                                 control.BackColor = Color.FromArgb(r, g, b);
                                 break;
                             case "panel11":
                                 HsbToRgb(20, 1, 1, out r, out g, out b);
                                 control.BackColor = Color.FromArgb(r, g, b);
                                 break;
-                        }
-                    }
+                        }                    
                 }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            var array = new[] { 2, 5, 10, 17, 20, -3, -8, -16, -20, -10 };
+            Random rand = new Random(((int)DateTime.Now.Ticks));
+            array = array.OrderBy(x => rand.Next()).ToArray();
+            Thread.Sleep(5);
+            progressBar1.PerformStep();
             if (page < 74)
             {
                 /*Считаем поставленные галки*/
@@ -111,9 +110,6 @@ namespace ColorTest
                                 ((CheckBox)control_check).Checked = false;
                             }
                     }
-
-                colorMtx[0, page - 1] = hue;
-                colorMtx[1, page - 1] = check;
 
                 testResult step = new testResult
                 {
@@ -139,7 +135,6 @@ namespace ColorTest
 
                 /*Следующий оттенок*/
                 hue += 5;
-                Random rand = new Random(((int)DateTime.Now.Ticks));
 
                 foreach (Control control in this.Controls)
                     if (control is Panel)
@@ -150,72 +145,89 @@ namespace ColorTest
                             control.BackColor = Color.FromArgb(r, g, b);
                         }
 
-                        if (control.Tag == "Saturation")
-                        {
-                            if (hue < 30) x = 0; else x = -30;
+                            if (hue < 20) x = 0; 
+                            else x = -20;
 
                             switch (control.Name)
                             {
                                 case "panel1":
-                                    HsbToRgb(hue + rand.Next(x, y), 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[0], 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel2":
-                                    HsbToRgb(hue + rand.Next(x, y) + 10, 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[1] + 10, 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel3":
-                                    HsbToRgb(hue + rand.Next(x, y) + 16, 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[2] + 16, 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel4":
-                                    HsbToRgb(hue + rand.Next(x, y) + 5, 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[3] + 5, 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel5":
-                                    HsbToRgb(hue + rand.Next(x, y) + 18, 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[4] + 18, 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                             }
 
-                        }
-
-                        if (control.Tag == "Brightness")
-                        {
-                            if (hue < 30) x = 0; else x = -30;
-
                             switch (control.Name)
                             {
                                 case "panel15":
-                                    HsbToRgb(hue + rand.Next(x, y), 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[5], 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel14":
-                                    HsbToRgb(hue + rand.Next(x, y), 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[6], 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel13":
-                                    HsbToRgb(hue + rand.Next(x, y), 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[7], 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel12":
-                                    HsbToRgb(hue + rand.Next(x, y), 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[8], 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                                 case "panel11":
-                                    HsbToRgb(hue + rand.Next(x, y), 1, 1, out r, out g, out b);
+                                    HsbToRgb(hue + array[9], 1, 1, out r, out g, out b);
                                     control.BackColor = Color.FromArgb(r, g, b);
                                     break;
                             }
                         }
                     }
-            }
 
             else
             {
                 Form2 graphic = new Form2();
                 graphic.Show();
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Form2 openG = new Form2();
+            openG.Show();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {            
+            Form3 modelMon = new Form3();
+            modelMon.ShowDialog();
+            model = modelMon.textBox1.Text;
+
+            if (model != "")
+            {
+                label2.Visible = false;
+                button1.Enabled = true;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Form4 faq = new Form4();
+            faq.ShowDialog();
         }
 
         public void HsbToRgb(double h, double S, double V, out int r, out int g, out int b)
@@ -307,6 +319,25 @@ namespace ColorTest
             if (i < 0) return 0;
             if (i > 255) return 255;
             return i;
+        }
+
+        private void colorChecked(object sender, EventArgs e)
+        {
+            foreach (Control box in this.Controls)
+            {
+                if (box is Panel)
+                {
+                    foreach (Control control_check in ((Panel)box).Controls)
+                    {
+                        if (box.Tag == ((Panel)sender).Tag)
+                        {
+                            if (((CheckBox)control_check).Checked)
+                            ((CheckBox)control_check).Checked = false;
+                            else ((CheckBox)control_check).Checked = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }
