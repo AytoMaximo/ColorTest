@@ -23,8 +23,11 @@ namespace ColorTest
 
             bool chFlag = false;
 
-            string[] allText = File.ReadAllLines("Repeat.txt");
-            chFlag = Convert.ToBoolean(allText.First());
+            if (File.Exists("Repeat.txt"))
+            {
+                string[] allText = File.ReadAllLines("Repeat.txt");
+                chFlag = Convert.ToBoolean(allText.First());
+            }
 
             using (var db = new testResultContext())
             {

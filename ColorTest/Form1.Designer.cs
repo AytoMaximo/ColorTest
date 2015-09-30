@@ -418,6 +418,7 @@
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Тест цветовосприятия";
             this.Load += new System.EventHandler(this.Form1_Load);

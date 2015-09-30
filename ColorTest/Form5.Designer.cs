@@ -53,6 +53,7 @@
             this.ClientSize = new System.Drawing.Size(284, 131);
             this.Controls.Add(this.textBox1);
             this.Name = "Form5";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Предупреждение";
             this.Load += new System.EventHandler(this.Form5_Load);

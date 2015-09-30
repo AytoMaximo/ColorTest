@@ -99,6 +99,12 @@ namespace ColorTest
             progressBar1.PerformStep();
             if (page < 74)
             {
+                if ((page==24)||(page==49))
+                {
+                    Form6 timer = new Form6();
+                    timer.ShowDialog();
+                }
+
                 /*Считаем поставленные галки*/
                 foreach (Control control in Controls)
                     if (control is Panel)
@@ -123,6 +129,7 @@ namespace ColorTest
                     {
                         db.testResult.Add(step);
                         db.SaveChanges();
+                        
                     }
                 }
 
