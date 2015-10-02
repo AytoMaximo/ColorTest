@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
-using System.Threading;
 
 namespace ColorTest
 {
@@ -19,6 +18,7 @@ namespace ColorTest
         public string model;
         int x = -30; int y = 30;        
         int hue = 0; //для матрицы
+        Class1[] matrix = new Class1[73];
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -95,8 +95,8 @@ namespace ColorTest
             var array = new[] { 2, 5, 10, 17, 20, -3, -8, -16, -20, -10 };
             Random rand = new Random(((int)DateTime.Now.Ticks));
             array = array.OrderBy(x => rand.Next()).ToArray();
-            Thread.Sleep(5);
             progressBar1.PerformStep();
+
             if (page < 74)
             {
                 if ((page==24)||(page==49))
@@ -117,21 +117,7 @@ namespace ColorTest
                             }
                     }
 
-                testResult step = new testResult
-                {
-                    Model = model,
-                    Hue = hue,
-                    Check = check
-                };
-
-                {
-                    using (var db = new testResultContext())
-                    {
-                        db.testResult.Add(step);
-                        db.SaveChanges();
-                        
-                    }
-                }
+                matrix[page - 1] = new Class1(model, hue,check);
 
                     check = 0;
 
@@ -207,6 +193,23 @@ namespace ColorTest
 
             else
             {
+                {
+                    using (var db = new testResultContext())
+                    {
+                        for (int i = 0; i < matrix.Length; i++)
+                        {
+                            testResult step = new testResult
+                            {
+                                Model = matrix[i].model,
+                                Hue = matrix[i].hue,
+                                Check = matrix[i].check
+                            };
+                            db.testResult.Add(step);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
                 Form2 graphic = new Form2();
                 graphic.Show();
             }
